@@ -7,46 +7,58 @@
 #include <conio.h>
 #include <windows.h>
 
-
-
 using namespace std;
 
 bool gameOver; 
-const int width = 20; 
-const int height = 20; 
+const int width = 25; 
+const int height = 15; 
 int x, y, fruitX, fruitY, score; 
 int tailX[100], tailY[100];
 int nTail; 
 enum eDirection { STOP = 0, LEFT, RIGHT, UP, DOWN};
 eDirection dir; 
 char answer = 'y';
+int gameMode; 
 
 void Setup();
-void Draw();
-void Input();
+void Frame();
+void Controls();
 void Logic();
-
-
 
 int main()
 {
+    cout << "WELCOME TO THE SNAKE_GAME\n\n";
+    cout << "Enter Game Mode ((1)) for Creative or ((2)) for Survival: "; 
+        cin >> gameMode; 
 
-
-    while (answer == 'y') {
+    switch (gameMode) {
+    case 1:
+       while (answer) {
         Setup();
         while (!gameOver)
         {
 
-           Draw();
-           Input();
+           Frame();
+           Controls();
            Logic();
            Sleep(60); //sleep(10); 
         }
-
-        cout << "TRY AGAIN BY PRESSING Y/y AND QUIT BY PRESSING N/n: "; 
-            cin >> answer; 
     }
+        break; 
 
+    case 2:
+            Setup();
+            while (!gameOver)
+            {
+
+                Frame();
+                Controls();
+                Logic();
+                Sleep(60); //sleep(10); 
+            }
+            
+        break; 
+    }
 
     return 0; 
 
@@ -65,7 +77,7 @@ void Setup()
 
 }
 
-void Draw()
+void Frame()
 {
     system("cls");
     for (int i{ 0 }; i < width + 2; i++)
@@ -82,7 +94,7 @@ void Draw()
             if (i == y && j == x)
                 std::cout << "O";
             else if (i == fruitY && j == fruitX)
-                std::cout << "F";
+                std::cout << "@";
             else {
                 bool print = false;
                 for (int k{ 0 }; k < nTail; k++)
@@ -115,7 +127,7 @@ void Draw()
 
 }
 
-void Input()
+void Controls()
 {
     if (_kbhit())
     {
@@ -193,7 +205,7 @@ void Logic()
             gameOver = true;
 
     if (x == fruitX && y == fruitY) {
-        score += 10;
+        score += 1;
         fruitX = rand() % width;
         fruitY = rand() % height;
         nTail++;
